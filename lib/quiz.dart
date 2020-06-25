@@ -90,7 +90,7 @@ class _QuizState extends State<Quiz> with SingleTickerProviderStateMixin{
         child: Column(
           children: <Widget>[
             Container(
-              padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+              padding: EdgeInsets.fromLTRB(12.0, 0.0, 12.0, 0.0),
               child: Row(
                 children: <Widget>[
                   Text("Question ",
