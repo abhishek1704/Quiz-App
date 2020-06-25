@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:quizapp/data.dart';
 import 'package:quizapp/questions.dart';
+import 'package:quizapp/result.dart';
 
 class Quiz extends StatefulWidget {
   @override
@@ -24,27 +25,51 @@ class _QuizState extends State<Quiz> with SingleTickerProviderStateMixin{
   void initState() {
     // TODO: implement initState
     super.initState();
+
     _questions = getQuestion();
+
     animationController = AnimationController(
-      duration: const Duration(seconds: 5), vsync: this
-    )..addListener(() {
+      duration: const Duration(seconds: 100), vsync: this);
+
+    animation = Tween(begin: animBegin, end: animEnd).animate(animationController)..addListener(() {
       setState(() {
 
       });
     });
-    animation = Tween(begin: animBegin,end:animEnd).animate(animationController);
+
     startAnimation();
-    animationController.addStatusListener((AnimationStatus status) {
+    animation.addStatusListener((AnimationStatus status) {
+
       if(status == AnimationStatus.completed) {
-        index++;
-        if(index == _questions.length) {
-          index=0;
-        }
-        resetAnimation();
-        startAnimation();
+
+          if(index < _questions.length-1) {
+            index++;
+            print(index);
+            resetAnimation();
+            startAnimation();
+          }
+          else {
+            print("hell !");
+            goToResult();
+          }
       }
     });
   }
+
+  goToResult() {
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Result(),
+        ));
+  }
+/*
+  @override
+  void dispose() {
+    animationController.stop();
+    super.dispose();
+  }*/
+
   startAnimation() {
     animationController.forward();
   }
@@ -102,67 +127,163 @@ class _QuizState extends State<Quiz> with SingleTickerProviderStateMixin{
                 ),
             ),
             SizedBox(height: 20,),
-            LinearProgressIndicator(
-                value: animation.value,
+            Container(
+                child: LinearProgressIndicator(
+                  value: animationController.value ?? 0.0,
+                )
+            ),
+            Container(
+              child: Image(
+                image: NetworkImage('${_questions[index].getImgUrl()}'),
+                fit: BoxFit.contain
               ),
-            Image(
-              image: NetworkImage('${_questions[index].getImgUrl()}'),),
+            ),
             /*CachedNetworkImage(
                 imageUrl: _questions[index].getImgUrl(),
               ),*/
             Spacer(),
-            Container(
+            GestureDetector(
+              onTap: () {
+                print(animation.value);
+                if(_questions[index].getAnswer() == _questions[index].getOp1()) {
+                  setState(() {
+                    score += 10;
+                  });
+                }
+                if(index < _questions.length-1) {
+                  setState(() {
+                    index++;
+                    resetAnimation();
+                    startAnimation();
+                    });
+                  }
+                  else {
+                    setState(() {
+                      stopAnimation();
+                      goToResult();
+                    });
+                  }
+              },
+              child: Container(
+                  padding: EdgeInsets.fromLTRB(54.0, 10.0, 54.0, 10.0),
+                  decoration: BoxDecoration(
+                    color: Colors.blue[400],
+                    borderRadius: BorderRadius.circular(40.0),
+                  ),
+                  child: Text('${_questions[index].getOp1()}',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18.0,
+                    ),
+                  ),
+              ),
+            ),
+            SizedBox(height: 20,),
+            GestureDetector(
+              onTap: () {
+                if(_questions[index].getAnswer() == _questions[index].getOp2()) {
+                  setState(() {
+                    score += 10;
+                  });
+                }
+                if(index < _questions.length-1) {
+                  setState(() {
+                    index++;
+                    resetAnimation();
+                    startAnimation();
+                  });
+                }
+                else {
+                  setState(() {
+                    stopAnimation();
+                    goToResult();
+                  });
+                }
+              },
+              child: Container(
                 padding: EdgeInsets.fromLTRB(54.0, 10.0, 54.0, 10.0),
                 decoration: BoxDecoration(
                   color: Colors.blue[400],
                   borderRadius: BorderRadius.circular(40.0),
                 ),
-                child: Text('${_questions[index].getOp1()}',
+                child: Text('${_questions[index].getOp2()}',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 20.0,
+                    fontSize: 18.0,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 20,),
+            GestureDetector(
+              onTap: () {
+                if(_questions[index].getAnswer() == _questions[index].getOp3()) {
+                  setState(() {
+                    score += 10;
+                  });
+                }
+                if(index < _questions.length-1) {
+                  setState(() {
+                    index++;
+                    resetAnimation();
+                    startAnimation();
+                  });
+                }
+                else {
+                  setState(() {
+                    stopAnimation();
+                    goToResult();
+                  });
+                }
+              },
+
+              child: Container(
+                padding: EdgeInsets.fromLTRB(54.0, 10.0, 54.0, 10.0),
+                decoration: BoxDecoration(
+                  color: Colors.blue[400],
+                  borderRadius: BorderRadius.circular(40.0),
+                ),
+                child: Text('${_questions[index].getOp3()}',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18.0,
                   ),
                 ),
             ),
-            SizedBox(height: 20,),
-            Container(
-              padding: EdgeInsets.fromLTRB(54.0, 10.0, 54.0, 10.0),
-              decoration: BoxDecoration(
-                color: Colors.blue[400],
-                borderRadius: BorderRadius.circular(40.0),
-              ),
-              child: Text('${_questions[index].getOp2()}',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20.0,
-                ),
-              ),
             ),
             SizedBox(height: 20,),
-            Container(
-              padding: EdgeInsets.fromLTRB(54.0, 10.0, 54.0, 10.0),
-              decoration: BoxDecoration(
-                color: Colors.blue[400],
-                borderRadius: BorderRadius.circular(40.0),
-              ),
-              child: Text('${_questions[index].getOp3()}',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20.0,
+            GestureDetector(
+              onTap: () {
+                if(_questions[index].getAnswer() == _questions[index].getOp4()) {
+                  setState(() {
+                    score += 10;
+                  });
+                }
+                if(index < _questions.length-1) {
+                  setState(() {
+                    index++;
+                    resetAnimation();
+                    startAnimation();
+                  });
+                }
+                else {
+                  setState(() {
+                    stopAnimation();
+                    goToResult();
+                  });
+                }
+              },
+              child: Container(
+                padding: EdgeInsets.fromLTRB(54.0, 10.0, 54.0, 10.0),
+                decoration: BoxDecoration(
+                  color: Colors.blue[400],
+                  borderRadius: BorderRadius.circular(40.0),
                 ),
-              ),
-            ),
-            SizedBox(height: 20,),
-            Container(
-              padding: EdgeInsets.fromLTRB(54.0, 10.0, 54.0, 10.0),
-              decoration: BoxDecoration(
-                color: Colors.blue[400],
-                borderRadius: BorderRadius.circular(40.0),
-              ),
-              child: Text('${_questions[index].getOp4()}',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20.0,
+                child: Text('${_questions[index].getOp4()}',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18.0,
+                  ),
                 ),
               ),
             ),
