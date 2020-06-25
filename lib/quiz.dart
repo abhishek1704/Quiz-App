@@ -49,7 +49,6 @@ class _QuizState extends State<Quiz> with SingleTickerProviderStateMixin{
             startAnimation();
           }
           else {
-            print("hell !");
             goToResult();
           }
       }
