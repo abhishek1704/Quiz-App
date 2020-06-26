@@ -12,7 +12,7 @@ class Quiz extends StatefulWidget {
 class _QuizState extends State<Quiz> with SingleTickerProviderStateMixin{
 
   int index = 0, totalQue = 0;
-  int correct = 0, incorrect = 0, notAttempted = 0, score = 0;
+  int correct = 0, incorrect = 0, notAttempted = 0, score = 0, attempted = 0;
   List<Questions> _questions = new List<Questions>();
 
   Animation animation;
@@ -28,8 +28,10 @@ class _QuizState extends State<Quiz> with SingleTickerProviderStateMixin{
 
     _questions = getQuestion();
 
+    totalQue = _questions.length;
+
     animationController = AnimationController(
-      duration: const Duration(seconds: 100), vsync: this);
+      duration: const Duration(seconds: 10), vsync: this);
 
     animation = Tween(begin: animBegin, end: animEnd).animate(animationController)..addListener(() {
       setState(() {
@@ -51,6 +53,7 @@ class _QuizState extends State<Quiz> with SingleTickerProviderStateMixin{
           else {
             goToResult();
           }
+          notAttempted++;
       }
     });
   }
@@ -59,7 +62,13 @@ class _QuizState extends State<Quiz> with SingleTickerProviderStateMixin{
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => Result(),
+          builder: (context) => Result(
+            attempted: attempted,
+            notAttempted: notAttempted,
+            correct: correct,
+            totalQue: totalQue,
+            score: score,
+          ),
         ));
   }
 /*
@@ -143,12 +152,17 @@ class _QuizState extends State<Quiz> with SingleTickerProviderStateMixin{
             Spacer(),
             GestureDetector(
               onTap: () {
+                setState(() {
+                  attempted++;
+                });
                 print(animation.value);
                 if(_questions[index].getAnswer() == _questions[index].getOp1()) {
                   setState(() {
                     score += 10;
+                    correct++;
                   });
                 }
+
                 if(index < _questions.length-1) {
                   setState(() {
                     index++;
@@ -180,9 +194,13 @@ class _QuizState extends State<Quiz> with SingleTickerProviderStateMixin{
             SizedBox(height: 20,),
             GestureDetector(
               onTap: () {
+                setState(() {
+                  attempted++;
+                });
                 if(_questions[index].getAnswer() == _questions[index].getOp2()) {
                   setState(() {
                     score += 10;
+                    correct++;
                   });
                 }
                 if(index < _questions.length-1) {
@@ -198,6 +216,7 @@ class _QuizState extends State<Quiz> with SingleTickerProviderStateMixin{
                     goToResult();
                   });
                 }
+
               },
               child: Container(
                 padding: EdgeInsets.fromLTRB(54.0, 10.0, 54.0, 10.0),
@@ -216,9 +235,13 @@ class _QuizState extends State<Quiz> with SingleTickerProviderStateMixin{
             SizedBox(height: 20,),
             GestureDetector(
               onTap: () {
+                setState(() {
+                  attempted++;
+                });
                 if(_questions[index].getAnswer() == _questions[index].getOp3()) {
                   setState(() {
                     score += 10;
+                    correct++;
                   });
                 }
                 if(index < _questions.length-1) {
@@ -234,6 +257,7 @@ class _QuizState extends State<Quiz> with SingleTickerProviderStateMixin{
                     goToResult();
                   });
                 }
+
               },
 
               child: Container(
@@ -253,9 +277,13 @@ class _QuizState extends State<Quiz> with SingleTickerProviderStateMixin{
             SizedBox(height: 20,),
             GestureDetector(
               onTap: () {
+                setState(() {
+                  attempted++;
+                });
                 if(_questions[index].getAnswer() == _questions[index].getOp4()) {
                   setState(() {
                     score += 10;
+                    correct++;
                   });
                 }
                 if(index < _questions.length-1) {

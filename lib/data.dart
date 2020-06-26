@@ -14,14 +14,14 @@ List<Questions> getQuestion() {
       que:"The world famous Ajanta caves are situated in?",
       op1:"Orissa", op2:"Karnataka", op3:"Madhya Pradesh",op4: "Maharashtra",
       answer:"Maharashtra",
-      imgUrl: "https://cdn.britannica.com/70/153470-050-F4594C27/Ajanta-Caves-Maharashtra-India.jpg"  );
+      imgUrl: "https://cdn.britannica.com/70/153470-050-F4594C27/Ajanta-Caves-Maharashtra-India.jpg",);
   ques.add(que);
 
   que = new Questions(
       que:"We remember Charles Babbage (1792-1871) for what ?",
       op1:"Computers", op2:"Radio-Telegraphy", op3:"Steam Boating",op4: "Telescope",
       answer:"Computers",
-      imgUrl: "https://www.surveyhistory.org/images/babbage_small.jpg");
+      imgUrl: "https://kids.kiddle.co/images/thumb/8/82/CharlesBabbage.jpg/300px-CharlesBabbage.jpg",);
   ques.add(que);
 
   que = new Questions(
