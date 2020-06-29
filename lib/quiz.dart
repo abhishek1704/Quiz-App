@@ -31,7 +31,7 @@ class _QuizState extends State<Quiz> with SingleTickerProviderStateMixin{
     totalQue = _questions.length;
 
     animationController = AnimationController(
-      duration: const Duration(seconds: 10), vsync: this);
+      duration: const Duration(seconds: 15), vsync: this);
 
     animation = Tween(begin: animBegin, end: animEnd).animate(animationController)..addListener(() {
       setState(() {
@@ -93,7 +93,9 @@ class _QuizState extends State<Quiz> with SingleTickerProviderStateMixin{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[900],
       body: Container(
+
         padding: EdgeInsets.symmetric(vertical: 60),
         child: Column(
           children: <Widget>[
@@ -103,11 +105,13 @@ class _QuizState extends State<Quiz> with SingleTickerProviderStateMixin{
                 children: <Widget>[
                   Text("Question ",
                     style: TextStyle(
+                      color: Colors.amberAccent,
                       fontSize: 18.0,
                     ),
                   ),
-                  Text("${index+1}/${_questions.length}",
+                  Text("${index+1} of ${_questions.length}",
                     style: TextStyle(
+                      color: Colors.amberAccent,
                       fontSize: 24.0,
                       fontWeight: FontWeight.bold,
                     ),
@@ -115,12 +119,14 @@ class _QuizState extends State<Quiz> with SingleTickerProviderStateMixin{
                   Spacer(),
                   Text("$score ",
                     style: TextStyle(
+                      color: Colors.amberAccent,
                       fontSize: 24.0,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text("points",
                     style: TextStyle(
+                      color: Colors.amberAccent,
                       fontSize: 18.0,
                     ),
                    )
@@ -131,8 +137,12 @@ class _QuizState extends State<Quiz> with SingleTickerProviderStateMixin{
             Container(
               padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
               child: Text("${_questions[index].getQue()}",
-                  style: TextStyle(fontSize: 18.0,),
-                ),
+                  style: TextStyle(
+                    color: Colors.grey[300],
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold
+                  ),
+              ),
             ),
             SizedBox(height: 20,),
             Container(
@@ -140,178 +150,207 @@ class _QuizState extends State<Quiz> with SingleTickerProviderStateMixin{
                   value: animationController.value ?? 0.0,
                 )
             ),
-            Container(
-              child: Image(
-                image: NetworkImage('${_questions[index].getImgUrl()}'),
-                fit: BoxFit.contain
-              ),
+            Column(
+              children: <Widget>[
+                Container(
+                  child: Image(
+                    image: NetworkImage('${_questions[index].getImgUrl()}'),
+                  ),
+                ),
+              ],
             ),
             /*CachedNetworkImage(
                 imageUrl: _questions[index].getImgUrl(),
               ),*/
             Spacer(),
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  attempted++;
-                });
-                print(animation.value);
-                if(_questions[index].getAnswer() == _questions[index].getOp1()) {
-                  setState(() {
-                    score += 10;
-                    correct++;
-                  });
-                }
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 12.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          attempted++;
+                        });
+                        print(animation.value);
+                        if(_questions[index].getAnswer() == _questions[index].getOp1()) {
+                          setState(() {
+                            score += 10;
+                            correct++;
+                          });
+                        }
 
-                if(index < _questions.length-1) {
-                  setState(() {
-                    index++;
-                    resetAnimation();
-                    startAnimation();
-                    });
-                  }
-                  else {
-                    setState(() {
-                      stopAnimation();
-                      goToResult();
-                    });
-                  }
-              },
-              child: Container(
-                  padding: EdgeInsets.fromLTRB(54.0, 10.0, 54.0, 10.0),
-                  decoration: BoxDecoration(
-                    color: Colors.blue[400],
-                    borderRadius: BorderRadius.circular(40.0),
-                  ),
-                  child: Text('${_questions[index].getOp1()}',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18.0,
+                        if(index < _questions.length-1) {
+                          setState(() {
+                            index++;
+                            resetAnimation();
+                            startAnimation();
+                            });
+                          }
+                          else {
+                            setState(() {
+                              stopAnimation();
+                              goToResult();
+                            });
+                          }
+                      },
+                      child: Container(
+                          padding: EdgeInsets.all(15.0),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(40.0),
+                          ),
+                          child: Text('A. ${_questions[index].getOp1()}',
+                            style: TextStyle(
+                              color: Colors.grey[900],
+                              fontSize: 18.0,
+                            ),
+                          ),
+                      ),
                     ),
                   ),
+                  SizedBox(width: 30.0,),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          attempted++;
+                        });
+                        if(_questions[index].getAnswer() == _questions[index].getOp2()) {
+                          setState(() {
+                            score += 10;
+                            correct++;
+                          });
+                        }
+                        if(index < _questions.length-1) {
+                          setState(() {
+                            index++;
+                            resetAnimation();
+                            startAnimation();
+                          });
+                        }
+                        else {
+                          setState(() {
+                            stopAnimation();
+                            goToResult();
+                          });
+                        }
+
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(15.0),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(40.0),
+                        ),
+                        child: Text('B. ${_questions[index].getOp2()}',
+                          style: TextStyle(
+                            color: Colors.grey[900],
+                            fontSize: 18.0,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             SizedBox(height: 20,),
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  attempted++;
-                });
-                if(_questions[index].getAnswer() == _questions[index].getOp2()) {
-                  setState(() {
-                    score += 10;
-                    correct++;
-                  });
-                }
-                if(index < _questions.length-1) {
-                  setState(() {
-                    index++;
-                    resetAnimation();
-                    startAnimation();
-                  });
-                }
-                else {
-                  setState(() {
-                    stopAnimation();
-                    goToResult();
-                  });
-                }
 
-              },
-              child: Container(
-                padding: EdgeInsets.fromLTRB(54.0, 10.0, 54.0, 10.0),
-                decoration: BoxDecoration(
-                  color: Colors.blue[400],
-                  borderRadius: BorderRadius.circular(40.0),
-                ),
-                child: Text('${_questions[index].getOp2()}',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18.0,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 20,),
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  attempted++;
-                });
-                if(_questions[index].getAnswer() == _questions[index].getOp3()) {
-                  setState(() {
-                    score += 10;
-                    correct++;
-                  });
-                }
-                if(index < _questions.length-1) {
-                  setState(() {
-                    index++;
-                    resetAnimation();
-                    startAnimation();
-                  });
-                }
-                else {
-                  setState(() {
-                    stopAnimation();
-                    goToResult();
-                  });
-                }
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 12.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          attempted++;
+                        });
+                        print(animation.value);
+                        if(_questions[index].getAnswer() == _questions[index].getOp3()) {
+                          setState(() {
+                            score += 10;
+                            correct++;
+                          });
+                        }
 
-              },
+                        if(index < _questions.length-1) {
+                          setState(() {
+                            index++;
+                            resetAnimation();
+                            startAnimation();
+                          });
+                        }
+                        else {
+                          setState(() {
+                            stopAnimation();
+                            goToResult();
+                          });
+                        }
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(15.0),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(40.0),
+                        ),
+                        child: Text('C. ${_questions[index].getOp3()}',
+                          style: TextStyle(
+                            color: Colors.grey[900],
+                            fontSize: 18.0,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 30.0,),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          attempted++;
+                        });
+                        if(_questions[index].getAnswer() == _questions[index].getOp4()) {
+                          setState(() {
+                            score += 10;
+                            correct++;
+                          });
+                        }
+                        if(index < _questions.length-1) {
+                          setState(() {
+                            index++;
+                            resetAnimation();
+                            startAnimation();
+                          });
+                        }
+                        else {
+                          setState(() {
+                            stopAnimation();
+                            goToResult();
+                          });
+                        }
 
-              child: Container(
-                padding: EdgeInsets.fromLTRB(54.0, 10.0, 54.0, 10.0),
-                decoration: BoxDecoration(
-                  color: Colors.blue[400],
-                  borderRadius: BorderRadius.circular(40.0),
-                ),
-                child: Text('${_questions[index].getOp3()}',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18.0,
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(15.0),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(40.0),
+                        ),
+                        child: Text('D. ${_questions[index].getOp4()}',
+                          style: TextStyle(
+                            color: Colors.grey[900],
+                            fontSize: 18.0,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-            ),
-            ),
-            SizedBox(height: 20,),
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  attempted++;
-                });
-                if(_questions[index].getAnswer() == _questions[index].getOp4()) {
-                  setState(() {
-                    score += 10;
-                    correct++;
-                  });
-                }
-                if(index < _questions.length-1) {
-                  setState(() {
-                    index++;
-                    resetAnimation();
-                    startAnimation();
-                  });
-                }
-                else {
-                  setState(() {
-                    stopAnimation();
-                    goToResult();
-                  });
-                }
-              },
-              child: Container(
-                padding: EdgeInsets.fromLTRB(54.0, 10.0, 54.0, 10.0),
-                decoration: BoxDecoration(
-                  color: Colors.blue[400],
-                  borderRadius: BorderRadius.circular(40.0),
-                ),
-                child: Text('${_questions[index].getOp4()}',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18.0,
-                  ),
-                ),
+                ],
               ),
             ),
             ],

@@ -21,7 +21,7 @@ List<Questions> getQuestion() {
       que:"We remember Charles Babbage (1792-1871) for what ?",
       op1:"Computers", op2:"Radio-Telegraphy", op3:"Steam Boating",op4: "Telescope",
       answer:"Computers",
-      imgUrl: "https://kids.kiddle.co/images/thumb/8/82/CharlesBabbage.jpg/300px-CharlesBabbage.jpg",);
+      imgUrl: "https://s2.studylib.net/store/data/005366139_1-155c1f642b4f7d3add425c415667f46b-300x300.png",);
   ques.add(que);
 
   que = new Questions(
